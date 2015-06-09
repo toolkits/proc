@@ -1,7 +1,7 @@
 package proc
 
 import (
-	ntime "github.com/niean/gotools/time"
+	ntime "github.com/toolkits/time"
 	"sync"
 	"time"
 )

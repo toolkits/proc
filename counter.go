@@ -31,7 +31,13 @@ func (this *SCounterBase) Get() *SCounterBase {
 	this.RLock()
 	defer this.RUnlock()
 
-	return this
+	return &SCounterBase{
+		Name:  this.Name,
+		Cnt:   this.Cnt,
+		Time:  this.Time,
+		ts:    this.ts,
+		Other: deepCopyMap(this.Other),
+	}
 }
 
 func (this *SCounterBase) SetCnt(cnt int64) {
@@ -103,7 +109,16 @@ func (this *SCounterQps) Get() *SCounterQps {
 		this.lastCnt = this.Cnt
 	}
 
-	return this
+	return &SCounterQps{
+		Name:    this.Name,
+		Cnt:     this.Cnt,
+		Qps:     this.Qps,
+		Time:    this.Time,
+		ts:      this.ts,
+		lastTs:  this.lastTs,
+		lastCnt: this.lastCnt,
+		Other:   deepCopyMap(this.Other),
+	}
 }
 
 func (this *SCounterQps) Incr() {
@@ -137,4 +152,12 @@ func (this *SCounterQps) PutOther(key string, value interface{}) bool {
 
 func (this *SCounterQps) incrBy(incr int64) {
 	this.Cnt += incr
+}
+
+func deepCopyMap(src map[string]interface{}) map[string]interface{} {
+	dst := make(map[string]interface{})
+	for key, val := range src {
+		dst[key] = val
+	}
+	return dst
 }
